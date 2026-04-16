@@ -40,43 +40,27 @@ ul.task-list li input[type="checkbox"] {
 <link href="got_report_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="got_report_files/libs/bootstrap/bootstrap-8ffd5f67044e5306d9846f29df41dda5.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 
-  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
-  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
-
-<script type="text/javascript">
-const typesetMath = (el) => {
-  if (window.MathJax) {
-    // MathJax Typeset
-    window.MathJax.typeset([el]);
-  } else if (window.katex) {
-    // KaTeX Render
-    var mathElements = el.getElementsByClassName("math");
-    var macros = [];
-    for (var i = 0; i < mathElements.length; i++) {
-      var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
-        window.katex.render(texText.data, mathElements[i], {
-          displayMode: mathElements[i].classList.contains('display'),
-          throwOnError: false,
-          macros: macros,
-          fleqn: false
-        });
-      }
-    }
-  }
-}
-window.Quarto = {
-  typesetMath
-};
-</script>
 
 </head>
 
 <body class="quarto-light">
 
 <div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
-<div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-  
+<div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+  <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction"><span class="header-section-number">1</span> Introduction</a></li>
+  <li><a href="#overview" id="toc-overview" class="nav-link" data-scroll-target="#overview"><span class="header-section-number">2</span> Overview</a></li>
+  <li><a href="#basic-statistics" id="toc-basic-statistics" class="nav-link" data-scroll-target="#basic-statistics"><span class="header-section-number">3</span> Basic Statistics</a></li>
+  <li><a href="#viewership-over-time" id="toc-viewership-over-time" class="nav-link" data-scroll-target="#viewership-over-time"><span class="header-section-number">4</span> Viewership Over Time</a></li>
+  <li><a href="#episode-to-episode-change-in-viewership" id="toc-episode-to-episode-change-in-viewership" class="nav-link" data-scroll-target="#episode-to-episode-change-in-viewership"><span class="header-section-number">5</span> Episode-to-Episode Change in Viewership</a></li>
+  <li><a href="#average-viewership-by-season" id="toc-average-viewership-by-season" class="nav-link" data-scroll-target="#average-viewership-by-season"><span class="header-section-number">6</span> Average Viewership by Season</a></li>
+  <li><a href="#interpretation" id="toc-interpretation" class="nav-link" data-scroll-target="#interpretation"><span class="header-section-number">7</span> Interpretation</a></li>
+  <li><a href="#conclusion" id="toc-conclusion" class="nav-link" data-scroll-target="#conclusion"><span class="header-section-number">8</span> Conclusion</a></li>
+  </ul>
+</nav>
 </div>
 <main class="content" id="quarto-document-content">
 
@@ -111,13 +95,85 @@ window.Quarto = {
 </header>
 
 
-<p>library(readr) library(dplyr) library(knitr) library(ggplot2)</p>
-<p>tv &lt;- read_csv(“data/viewership_cleaned.csv”) summary_stats &lt;- read_csv(“data/summary_stats.csv”) season_summary &lt;- read_csv(“data/season_summary.csv”)</p>
-<p>first_episode &lt;- tv[1, ] last_episode &lt;- tv[nrow(tv), ]</p>
-<p>highest_episode &lt;- tv %&gt;% filter(viewers == max(viewers, na.rm = TRUE)) %&gt;% slice(1) lowest_episode &lt;- tv %&gt;% filter(viewers == min(viewers, na.rm = TRUE)) %&gt;% slice(1)</p>
-<p>largest_increase &lt;- tv %&gt;% filter(change_from_previous == max(change_from_previous, na.rm = TRUE)) %&gt;% slice(1) largest_drop &lt;- tv %&gt;% filter(change_from_previous == min(change_from_previous, na.rm = TRUE)) %&gt;% slice(1)</p>
-<p>avg_viewers &lt;- mean(tv<span class="math inline">\(viewers, na.rm = TRUE)
-overall_change &lt;- last_episode\)</span>viewers - first_episode$viewers</p>
+<section id="introduction" class="level1" data-number="1">
+<h1 data-number="1"><span class="header-section-number">1</span> Introduction</h1>
+<p>This report examines the episode-level viewership trends of Game of Thrones, one of the most commercially successful television series of the 2010s. The analysis focuses on how audience size changed over the full run of the show, using episode-level data across all eight seasons.</p>
+</section>
+<section id="overview" class="level1" data-number="2">
+<h1 data-number="2"><span class="header-section-number">2</span> Overview</h1>
+<p>Game of Thrones is a fantasy drama television series based on George R. R. Martin’s A Song of Ice and Fire novels. The show follows multiple rival houses competing for political power in the fictional continents of Westeros and Essos. Over time, the series became one of the most widely watched and culturally influential television productions of its era. <img src="images/got_poster.jpg" class="img-fluid" alt="Poster of Game of Thrones"></p>
+</section>
+<section id="basic-statistics" class="level1" data-number="3">
+<h1 data-number="3"><span class="header-section-number">3</span> Basic Statistics</h1>
+<p>The table below summarizes the overall viewership pattern across all episodes.</p>
+<div class="cell">
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<caption>Overall viewership summary statistics</caption>
+<colgroup>
+<col style="width: 7%">
+<col style="width: 21%">
+<col style="width: 20%">
+<col style="width: 18%">
+<col style="width: 18%">
+<col style="width: 13%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: right;">episodes</th>
+<th style="text-align: right;">average_viewers_millions</th>
+<th style="text-align: right;">median_viewers_millions</th>
+<th style="text-align: right;">min_viewers_millions</th>
+<th style="text-align: right;">max_viewers_millions</th>
+<th style="text-align: right;">std_dev_viewers</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">73</td>
+<td style="text-align: right;">6.44</td>
+<td style="text-align: right;">6.64</td>
+<td style="text-align: right;">2.2</td>
+<td style="text-align: right;">13.6</td>
+<td style="text-align: right;">2.82</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<section id="viewership-over-time" class="level1" data-number="4">
+<h1 data-number="4"><span class="header-section-number">4</span> Viewership Over Time</h1>
+<p>The first figure shows how episode-level audience size changed throughout the series. The line chart indicates a strong long-run upward trend in audience size. Although viewership fluctuated from episode to episode, the overall direction was clearly positive, especially in the later seasons. <img src="images/viewership_over_time.png" class="img-fluid" alt="Chart of Viewership Over Time Game of Thrones"></p>
+</section>
+<section id="episode-to-episode-change-in-viewership" class="level1" data-number="5">
+<h1 data-number="5"><span class="header-section-number">5</span> Episode-to-Episode Change in Viewership</h1>
+<p>The second figure presents the change in audience size from one episode to the next. This chart highlights that while the series gained viewers overall, short-term movements were volatile. Some episodes generated strong gains in attention, whereas others were followed by noticeable declines.</p>
+</section>
+<section id="average-viewership-by-season" class="level1" data-number="6">
+<h1 data-number="6"><span class="header-section-number">6</span> Average Viewership by Season</h1>
+<p>To better understand the broader trend, the next figure summarizes average viewership at the season level.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="got_report_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The season-level averages show that audience growth was not limited to a few isolated episodes. Instead, the show built and maintained larger audiences over time, with particularly strong growth in Seasons 7 and 8.</p>
+</section>
+<section id="interpretation" class="level1" data-number="7">
+<h1 data-number="7"><span class="header-section-number">7</span> Interpretation</h1>
+<p>The viewership of <em>Game of Thrones</em> shows a strong upward trend across the series, despite several short-term fluctuations between episodes. The first recorded episode attracted 2.22 million viewers, whereas the final episode attracted 13.6 million viewers, representing an overall increase of 11.38 million viewers.</p>
+<p>Across all episodes, the average audience size was 6.44 million viewers. The highest viewership was recorded for <em>The Iron Throne</em> (Season 8, Episode 6), which reached 13.6 million viewers. By contrast, the lowest audience was observed for <em>The Kingsroad</em> (Season 1, Episode 2), with 2.2 million viewers.</p>
+<p>The largest episode-to-episode increase in audience size was 1.8 million viewers, observed for <em>The Dragon and the Wolf</em>. The sharpest decline was 1.5 million viewers, observed for <em>A Knight of the Seven Kingdoms</em>. Overall, the data suggests that the series gained substantial popularity over time, even though audience changes at the episode level remained uneven.</p>
+</section>
+<section id="conclusion" class="level1" data-number="8">
+<h1 data-number="8"><span class="header-section-number">8</span> Conclusion</h1>
+<p>This report shows that Game of Thrones experienced substantial audience growth over the course of its run. While episode-level changes were sometimes volatile, the long-term pattern was clearly upward. The combination of rising season averages, a much larger finale audience, and repeated spikes in later seasons indicates that the show expanded its reach significantly as it progressed.</p>
+</section>
 
 </main>
 <!-- /main column -->
