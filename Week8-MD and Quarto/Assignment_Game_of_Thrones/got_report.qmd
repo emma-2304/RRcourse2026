@@ -1,0 +1,36 @@
+---
+title: "Game of Thrones Viewership Report"
+author: "Tam Nguyen Bang_475308"
+date: today
+format:
+  html:
+    toc: true
+    number-sections: true
+    theme: cosmo
+execute:
+  echo: false
+  warning: false
+  message: false
+---
+
+```{r}
+library(readr)
+library(dplyr)
+library(knitr)
+library(ggplot2)
+
+tv <- read_csv("data/viewership_cleaned.csv")
+summary_stats <- read_csv("data/summary_stats.csv")
+season_summary <- read_csv("data/season_summary.csv")
+
+first_episode <- tv[1, ]
+last_episode <- tv[nrow(tv), ]
+
+highest_episode <- tv %>% filter(viewers == max(viewers, na.rm = TRUE)) %>% slice(1)
+lowest_episode  <- tv %>% filter(viewers == min(viewers, na.rm = TRUE)) %>% slice(1)
+
+largest_increase <- tv %>% filter(change_from_previous == max(change_from_previous, na.rm = TRUE)) %>% slice(1)
+largest_drop     <- tv %>% filter(change_from_previous == min(change_from_previous, na.rm = TRUE)) %>% slice(1)
+
+avg_viewers <- mean(tv$viewers, na.rm = TRUE)
+overall_change <- last_episode$viewers - first_episode$viewers
